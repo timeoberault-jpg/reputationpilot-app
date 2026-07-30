@@ -122,11 +122,12 @@ fait la route `/api/cron/sync-reviews`, planifiée via `vercel.json`.
    `.env.local` sous `RESEND_API_KEY`.
 2. Adapte l'adresse `from:` dans `lib/resend/client.ts` à ton propre
    domaine vérifié.
-3. La variable `CRON_SECRET` est générée et injectée automatiquement par
-   Vercel dès que tu déploies — rien à faire en local pour ça (en local,
-   tu peux tester la route directement avec `curl -H "Authorization:
-   Bearer test" http://localhost:3000/api/cron/sync-reviews` après avoir
-   mis `CRON_SECRET=test` dans `.env.local`).
+3. Définis toi-même une variable `CRON_SECRET` dans Vercel (n'importe quelle
+   chaîne longue et aléatoire de ton choix). Vercel l'enverra automatiquement
+   dans l'en-tête `Authorization` lors de l'appel du cron — mais c'est bien à
+   toi de créer cette variable, elle n'est pas générée automatiquement.
+   En local, mets la même valeur dans `.env.local` et teste avec :
+   `curl -H "Authorization: Bearer TA_VALEUR" http://localhost:3000/api/cron/sync-reviews`
 
 ### Limite assumée : fréquence des alertes
 Le plan Vercel gratuit (Hobby) limite les cron jobs à **une exécution par

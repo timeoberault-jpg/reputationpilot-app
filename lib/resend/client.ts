@@ -2,6 +2,12 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY || "re_placeholder");
 
+// Tant qu'aucun domaine n'est vérifié chez Resend, on utilise leur adresse
+// de test (qui n'envoie que vers ta propre adresse). Une fois ton domaine
+// vérifié, définis RESEND_FROM dans Vercel, ex :
+//   ReputationPilot <alerts@tondomaine.com>
+const FROM = process.env.RESEND_FROM || "ReputationPilot <onboarding@resend.dev>";
+
 export async function sendRatingAlert(params: {
   to: string;
   businessName: string;
@@ -15,7 +21,7 @@ export async function sendRatingAlert(params: {
   const isBadNews = ratingChange < 0;
 
   await resend.emails.send({
-    from: "ReputationPilot <alerts@notifications.reputationpilot.app>",
+    from: FROM,
     to,
     subject: isBadNews
       ? `Your rating dropped — ${businessName}`

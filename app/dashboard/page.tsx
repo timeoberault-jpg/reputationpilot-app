@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import LogoutButton from "./logout-button";
 import SyncButton from "./sync-button";
+import TestEmailButton from "./test-email-button";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -178,6 +179,8 @@ export default async function DashboardPage() {
           </div>
         </>
       )}
+
+      <TestEmailButton />
     </main>
   );
 }
