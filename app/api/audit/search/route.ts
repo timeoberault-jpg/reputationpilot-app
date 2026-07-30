@@ -1,6 +1,21 @@
 import { NextResponse } from "next/server";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
+  const allowed = await checkRateLimit({
+    ip: getClientIp(request),
+    route: "audit-search",
+    maxRequests: 10,
+    windowMinutes: 60,
+  });
+
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Too many searches. Please try again in an hour." },
+      { status: 429 }
+    );
+  }
+
   const { query } = await request.json();
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
 

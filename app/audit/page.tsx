@@ -16,28 +16,41 @@ export default function AuditPage() {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [report, setReport] = useState<Report | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     setReport(null);
     const res = await fetch("/api/audit/search", {
       method: "POST",
       body: JSON.stringify({ query }),
     });
     setLoading(false);
-    if (res.ok) setResults((await res.json()).results);
+    if (res.ok) {
+      setResults((await res.json()).results);
+    } else {
+      const data = await res.json().catch(() => null);
+      setError(data?.error ?? "Search failed. Please try again.");
+    }
   }
 
   async function handleSelect(placeId: string) {
     setLoading(true);
+    setError(null);
     setResults([]);
     const res = await fetch("/api/audit/report", {
       method: "POST",
       body: JSON.stringify({ placeId }),
     });
     setLoading(false);
-    if (res.ok) setReport(await res.json());
+    if (res.ok) {
+      setReport(await res.json());
+    } else {
+      const data = await res.json().catch(() => null);
+      setError(data?.error ?? "Could not load this business.");
+    }
   }
 
   return (
@@ -67,6 +80,12 @@ export default function AuditPage() {
             {loading ? "…" : "Check my score"}
           </button>
         </form>
+      )}
+
+      {error && (
+        <p className="mb-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">
+          {error}
+        </p>
       )}
 
       <div className="flex flex-col gap-2">

@@ -30,13 +30,13 @@ const FEATURES = [
 const PLANS = [
   {
     name: "Starter",
-    price: "$19",
+    price: "€19",
     desc: "For a single location getting started.",
     features: ["Google reviews", "Instant alerts", "AI-drafted replies"],
   },
   {
     name: "Pro",
-    price: "$39",
+    price: "€39",
     desc: "For businesses that want the full picture.",
     features: ["Everything in Starter", "Facebook reviews", "Website widget", "Stats over time"],
     featured: true,

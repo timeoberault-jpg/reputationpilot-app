@@ -148,15 +148,12 @@ Page publique, sans inscription, qui affiche un score de réputation basé
 sur la note et le nombre d'avis Google d'un commerce, pensée comme aimant
 à prospects (CTA vers `/signup`).
 
-⚠️ **Point d'attention avant la mise en ligne publique** : les routes
-`/api/audit/search` et `/api/audit/report` sont volontairement
-accessibles sans connexion — ce qui veut aussi dire que n'importe qui
-peut les appeler en boucle et faire grimper ta facture Places API. Avant
-de partager ce lien largement (réseaux sociaux, pub), ajoute une
-protection basique : un rate-limit par IP (ex : package `@upstash/ratelimit`
-avec Redis, gratuit sur Vercel) ou un captcha simple (Cloudflare Turnstile,
-gratuit) devant le formulaire. Pas bloquant pour tester en petit comité,
-mais à faire avant une vraie mise en avant publique.
+⚠️ **Protection en place** : les routes `/api/audit/search` et
+`/api/audit/report` sont limitées à 10 requêtes par heure et par adresse IP
+(table `rate_limit_hits`, migration `0005_rate_limit.sql`). Ça évite qu'un bot
+fasse grimper la facture Google Places. Si tu constates un jour des abus plus
+sophistiqués (IP tournantes), il faudra ajouter un captcha type Cloudflare
+Turnstile devant le formulaire.
 
 ## Ce qui n'est PAS encore inclus
 Rien côté produit principal — les 6 blocs de développement sont terminés.

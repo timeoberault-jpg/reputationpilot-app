@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { fetchPlaceReviews } from "@/lib/google/places";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 // Score simple et transparent, pensé pour être explicable au commerçant,
 // pas pour être scientifiquement rigoureux : la note pèse le plus, le
@@ -13,6 +14,20 @@ function computeScore(rating: number | null, reviewCount: number | null): number
 }
 
 export async function POST(request: Request) {
+  const allowed = await checkRateLimit({
+    ip: getClientIp(request),
+    route: "audit-report",
+    maxRequests: 10,
+    windowMinutes: 60,
+  });
+
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again in an hour." },
+      { status: 429 }
+    );
+  }
+
   const { placeId } = await request.json();
 
   try {
