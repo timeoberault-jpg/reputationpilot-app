@@ -32,9 +32,12 @@ export async function POST(request: Request) {
       rating: Number(rating) || 3,
       reviewText,
     });
-  } catch {
+  } catch (err: any) {
+    // On renvoie le message réel pour pouvoir diagnostiquer.
+    const detail =
+      err?.error?.error?.message || err?.message || "Unknown error";
     return NextResponse.json(
-      { error: "AI generation failed. Please try again." },
+      { error: `AI error: ${detail}` },
       { status: 502 }
     );
   }

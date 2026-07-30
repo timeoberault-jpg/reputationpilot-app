@@ -24,7 +24,8 @@ export default function ComposePage() {
     setLoading(false);
 
     if (!res.ok) {
-      setError("Couldn't generate a reply. Try again.");
+      const data = await res.json().catch(() => null);
+      setError(data?.error ?? "Couldn't generate a reply. Try again.");
       return;
     }
 
