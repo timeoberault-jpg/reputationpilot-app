@@ -12,27 +12,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { reviewId } = await request.json();
+  const { authorName, rating, reviewText } = await request.json();
 
-  // La policy RLS garantit que l'utilisateur ne peut lire que les avis
-  // liés à son propre commerce.
-  const { data: review } = await supabase
-    .from("reviews")
-    .select("*, businesses(name)")
-    .eq("id", reviewId)
-    .single();
-
-  if (!review) {
-    return NextResponse.json({ error: "Review not found" }, { status: 404 });
+  if (!reviewText || typeof reviewText !== "string") {
+    return NextResponse.json({ error: "Review text is required" }, { status: 400 });
   }
+
+  const { data: business } = await supabase
+    .from("businesses")
+    .select("name")
+    .eq("user_id", user.id)
+    .single();
 
   let draft: string;
   try {
     draft = await draftReviewReply({
-      businessName: (review as any).businesses.name,
-      authorName: review.author_name,
-      rating: review.rating,
-      reviewText: review.review_text,
+      businessName: business?.name ?? "the business",
+      authorName: authorName || "there",
+      rating: Number(rating) || 3,
+      reviewText,
     });
   } catch {
     return NextResponse.json(
@@ -40,11 +38,6 @@ export async function POST(request: Request) {
       { status: 502 }
     );
   }
-
-  await supabase
-    .from("reviews")
-    .update({ ai_draft: draft })
-    .eq("id", reviewId);
 
   return NextResponse.json({ draft });
 }

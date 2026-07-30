@@ -1,8 +1,8 @@
 import Anthropic from "@anthropic-ai/sdk";
 
 const client = new Anthropic({
-     apiKey: process.env.ANTHROPIC_API_KEY || "sk-ant-placeholder",
-   });
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
 
 export async function draftReviewReply(params: {
   businessName: string;

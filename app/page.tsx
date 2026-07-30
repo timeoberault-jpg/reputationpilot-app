@@ -7,23 +7,23 @@ const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["500"], variable: "--f
 const FEATURES = [
   {
     label: "01",
-    title: "Instant alerts",
-    body: "Know the moment a review lands, especially the ones that need you fastest.",
+    title: "Daily monitoring",
+    body: "We watch your Google rating and review count so you never find out weeks late.",
   },
   {
     label: "02",
-    title: "AI-drafted replies",
-    body: "A reply written in your voice, ready to send in one copy-paste.",
+    title: "Alerts that matter",
+    body: "An email the moment a new review lands — and a warning when your rating slips.",
   },
   {
     label: "03",
-    title: "One dashboard",
-    body: "Every review, one screen, no more logging into three different apps.",
+    title: "AI-drafted replies",
+    body: "Paste the review, get a professional reply written for you in seconds.",
   },
   {
     label: "04",
-    title: "Site widget",
-    body: "Show your best reviews on your own website to turn visitors into customers.",
+    title: "Rating history",
+    body: "See how your reputation moves over time — something Google doesn't show you.",
   },
 ];
 
@@ -78,9 +78,9 @@ export default function LandingPage() {
             Turn today's review into tomorrow's customer.
           </h1>
           <p className="mt-5 text-lg text-[#6B6F6A]">
-            ReputationPilot watches Google and Facebook for new reviews, drafts
-            a reply in your voice, and puts your best feedback on your
-            website — all from one dashboard.
+            ReputationPilot watches your Google rating every day, emails you the
+            moment a new review lands, and writes the reply for you. So a bad
+            review never sits there for weeks.
           </p>
           <div className="mt-8 flex items-center gap-4">
             <a
